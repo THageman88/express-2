@@ -10,8 +10,20 @@ const hoursWords = [
     'eight',
     'nine',
     'ten',
-    'eleven',
-    'twelve',
+    'eleven'
+  ];
+  
+  const tensWords = [
+    '',
+    'ten',
+    'twenty',
+    'thirty',
+    'forty',
+    'fifty'
+  ];
+  
+  const minuteWords = [
+    '',
     'one',
     'two',
     'three',
@@ -22,53 +34,35 @@ const hoursWords = [
     'eight',
     'nine',
     'ten',
-    'eleven'
-];
-
-const minuteWords = [
-    '',
-    'oh one',
-    'oh two',
-    'oh three',
-    'oh four',
-    'oh five',
-    'oh six',
-    'oh seven',
-    'oh eight',
-    'oh nine',
-    'ten',
     'eleven',
     'twelve',
     'thirteen',
     'fourteen',
-    'quarter',
+    'fifteen',
     'sixteen',
     'seventeen',
     'eighteen',
-    'nineteen',
-    'twenty',
-    'twenty one',
-    'twenty two',
-    'twenty three',
-    'twenty four',
-    'twenty five',
-    'twenty six',
-    'twenty seven',
-    'twenty eight',
-    'twenty nine',
-    'half'
-];
-
-function timeToWords(time) {
-    const [hours, minutes] = time.split(':').map(Number);
+    'nineteen'
+  ];
+  
+  function timeToWords(time) {
+    let [hours, minutes] = time.split(':').map(Number);
     const isAm = hours < 12;
-
+    hours %= 12;
+    hours = hours || 12;
+  
     let hourWords = hoursWords[hours];
-    let minuteWords = minuteWords[minutes];
-
+    let minuteWord = '';
+  
     if (minutes === 0) {
-        return `${hourWords} o'clock ${isAm ? 'am' : 'pm'}`;
+      minuteWord = '';
+    } else if (minutes < 20) {
+      minuteWord = `${minuteWords[minutes]}`;
     } else {
-        return `${hourWords} ${minuteWords} ${isAm ? 'am' : 'pm'}`;
+      let tens = Math.floor(minutes / 10);
+      let units = minutes % 10;
+      minuteWord = `${tensWords[tens]} ${hoursWords[units]}`;
     }
-}
+  
+    return `${hourWords} ${minuteWord} ${isAm ? 'am' : 'pm'}`;
+  }
