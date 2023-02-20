@@ -34,7 +34,7 @@ router.get('/', authUser, requireLogin, async function(req, res, next) {
  * If user cannot be found, return a 404 err.
  *
  */
-
+//BUG #1 : There was nothing returned if the user wasnt found. Fixed with an if statement that throws a 404 user not found statement
 router.get('/:username', authUser, requireLogin, async function(
   req,
   res,
@@ -42,6 +42,9 @@ router.get('/:username', authUser, requireLogin, async function(
 ) {
   try {
     let user = await User.get(req.params.username);
+    if (!user) {
+      throw new ExpressError("User not found", 404);
+    }
     return res.json({ user });
   } catch (err) {
     return next(err);
